@@ -1,3 +1,7 @@
+```
+useCallback
+```
+
 ### ssr 服务端渲染
 
 nextjs 自带服务器，只处理ssr渲染；
@@ -18,7 +22,9 @@ nextjs 自带服务器，只处理ssr渲染；
 
 `setex c 10  1`     10s为过期时间，c为key
 
+redis-cli -p 6379  指定端口
 
+ auth apexsoft  密码登录
 
 router 的钩子
 
@@ -65,7 +71,7 @@ enhanceApp:App=>App,//默认的或者配置的
 enhanceComponent:Comment=>Comment//路由对应的
 ```
 
-
+<https://juejin.im/post/5cc08f0de51d453f38191d64> 自定义app与自定义document
 
 ### 定义样式
 
@@ -235,6 +241,40 @@ const inputRef=useRef()
 console.log(inputRef)//{current:{}}
 ```
 
+`useImperativeHandle`用于自定义暴露给父组件的`ref`属性。需要配合`forwardRef`一起使用。
+
+```js
+function Example(props, ref) {
+    const inputRef = useRef();
+    useImperativeHandle(ref, () => ({
+        focus: () => {
+            inputRef.current.focus();
+        }
+    }));
+    return <input ref={inputRef} />;
+}
+
+export default forwardRef(Example);
+```
+
+```js
+class App extends Component {
+  constructor(props){
+      super(props);
+      this.inputRef = createRef()
+  }
+
+  render() {
+    return (
+        <>
+            <Example ref={this.inputRef}/>
+            <button onClick={() => {this.inputRef.current.focus()}}>Click</button>
+        </>
+    );
+  }
+}
+```
+
 
 
 ### 优化hooks
@@ -336,3 +376,95 @@ reducer不应有任何副作用；外部变量禁止；
 
 
 
+### OAuth认证和授权
+
+认证：认证你是不是你，账号密码；
+
+授权：询问权限；被授权方会收获一定的权限
+
+cookie就是授权的凭证
+
+### 什么是OAuth
+
+行业标准的授权方式
+
+Authorization Code  
+
+![1557133562608](assets/1557133562608.png)
+
+Refresh Token  可以刷新token,延长toke时间
+
+![1557133687142](assets/1557133687142.png)
+
+device code 智能tv os
+
+password方式；一般不用，身份证借给别人用了
+
+implicit 不安全
+
+client Credentials 客户端权限；不涉及到具体用户；
+
+
+
+### OAuth Code 授权流程
+
+![1557133873764](assets/1557133873764.png)
+
+
+
+### OAuth 字段
+
+
+
+```
+client_Id
+client_secret
+```
+
+
+
+
+
+
+
+### cookie与session
+
+```
+new Koa().keys= ['secret1', 'secret2']; //设置加密短语
+报错解决：
+	Cannot set headers after they are sent to the client
+	此时设置了ctx.respond = false；koa设置了此项，不返回ctx.body
+	内容在handle时已经写完了并返回，session（）方法里，最后设置cookie失败
+
+```
+
+未保存session到服务端时，会有session.sig保存在浏览器端
+
+
+
+### 创建koa-session 的store，保存在redis
+
+maxAge//默认过期时间；expire//过期时间
+
+```
+headers:{
+    Accept:'application/json'//希望请求json数据
+    
+}
+```
+
+### cloneElement
+
+可传递props，并创建节点
+
+
+
+
+
+### lru缓存
+
+lru-cache；
+
+cache.set(‘key’,data)
+
+cache.get()
