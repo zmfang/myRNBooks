@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Proxy实现双向绑定</title>
+    <style>
+        .root {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='view' class="root">
+        <h3>Proxy: 双向数据绑定</h3>
+        <div>
+            <h3 v-bind='value'></h3>
+            <input type="text" v-value='value'>
+            <input type="button" value="+1" v-click='addOne'>
+            <input type="button" value="-1" v-click='minusOne'>
+        </div>
+    </div>
+</body>
+<script src="./index.js"></script>
+
+</html>
